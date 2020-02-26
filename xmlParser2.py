@@ -6,41 +6,49 @@ Josh's XML Parser
 import xml.etree.ElementTree as ET
 
 def take_in_file():
+    # Here is a sample file: 
+    # C:\\Users\\joshua.frerichs\\Desktop\\PASSED_ESYNT19014_83_276_2020_1_8_18_28.xml
     get_xml = input("Please copy and paste the xml file and input here: ")
     return get_xml
 
 def parseXML(get_xml):
-    #xml = "C:\\Users\\joshua.frerichs\\Desktop\\PASSED_ESYNT19014_83_276_2020_1_8_18_28.xml"
     tree = ET.parse(get_xml)
     return tree
 
 def change_elements(tree):
     trueFalse = False
-
     while trueFalse != True:
-        print("To change testsuites, enter: 'TTS'")
-        print("To change testsuite, enter 'TT'")
-        print("To change testcase, enter 'TC'")
+        print("To change testsuites, enter: 'testsuites'")
+        print("To change testsuite, enter 'testsuite'")
+        print(f"To change testcase, enter 'testcase'")
         print("To return to menu, enter 'Menu'")
-        option = input("What element would you like to change? ")
-        if option == "TTS":
-            change_testsuites(tree)
-        elif option == "TT":
-            change_testsuite(tree)
-        elif option == "TC":
-            change_testcase(tree)
-        elif option == "Menu":
+        element_change = input("What element would you like to change? ")
+        if element_change == "testsuites" or element_change =="testsuite" or element_change == "testcase":
+            change_tags(tree, element_change)
+            return element_change
+        elif element_change == "Menu":
             trueFalse = True
     menu()
 
-def change_testsuites(tree):
-    pass
-
-def change_testsuite(tree):
-    pass
-
-def change_testcase(tree):
-    pass
+def change_tags(tree, element_change):
+    trueFalse = False
+    while trueFalse != True:
+        print(f"To find all cases of a tag in {element_change}, enter: 'Find All'")
+        print(f"To add a tag to {element_change}, enter 'Add Tag'")
+        print(f"To remove a tag from {element_change}, enter 'Remove Tag'")
+        print("To change different element, enter: 'Diff Element'")
+        print("To return to home menu, enter: 'Home Menu'")
+        option = input("Please enter a command: ")
+        if option == "Find All":
+            pass
+        elif option == "Add Tag":
+            pass
+        elif option == "Remove Tag":
+            pass
+        elif option == "Diff Element":
+            change_elements(tree)
+        elif option == "Home Menu":
+            menu()
 
 def save_xml(tree, get_xml):
     yesNo = input("Would you like to save to the original file name? (yes/no): ")
@@ -59,17 +67,16 @@ def displayElements(tree):
             print(testcase.tag, testcase.attrib)
 
 def menu():
-    
     trueFalse = False
     while trueFalse != True:
-        print("To read a new file, enter 'Read File'")
-        print("To parse current file, enter 'Parse'")
+        print("To enter a file, enter 'New File'")
+        print("To read the current file, enter 'Read File'")
         print("To save your current file, enter 'Save File'")
         print("To enter change file elements, enter 'Change File Elements'")
         print("To display all file elements, enter 'Display Elements'")
         print("To quit the program, enter 'Quit'")
         option = input("Please enter a command: ")
-        if option == "Read File":
+        if option == "New File":
             get_xml = take_in_file()
         elif option == "Parse":
             tree = parseXML(get_xml)
