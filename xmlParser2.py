@@ -25,6 +25,24 @@ def parseXML(get_xml):
 
 
     return tree
+def change_elements():
+    trueFalse = False
+
+    while trueFalse != True:
+        print("To change testsuites, enter: 'TTS'")
+        print("To change testsuite, enter 'TT'")
+        print("To change testcase, enter 'TC'")
+        print("To return to menu, enter 'Menu'")
+        option = input("What element would you like to change? ")
+        if option == "tts":
+            change_testsuites()
+        elif option == "tt":
+            change_testsuite()
+        elif option == "tc":
+            change_testcase()
+        elif option == "menu":
+            trueFalse = True
+    menu()
 
 def change_testsuites():
     """ find = input("What do you want to remove in testsuites? ")
@@ -52,11 +70,12 @@ def save_xml(tree, get_xml):
 def menu():
     
     trueFalse = False
-    print("To read a new file enter 'Read File'")
-    print("To parse current file enter 'Parse'")
-    print("To save your current file enter 'Save File'")
-    print("To quit the program enter 'Quit'")
     while trueFalse != True:
+        print("To read a new file, enter 'Read File'")
+        print("To parse current file, enter 'Parse'")
+        print("To save your current file, enter 'Save File'")
+        print("To enter change file elements, enter 'Change File Elements'")
+        print("To quit the program, enter 'Quit'")
         option = input("Please enter a command: ")
         if option == "Read File":
             get_xml = take_in_file()
@@ -64,6 +83,8 @@ def menu():
             tree = parseXML(get_xml)
         elif option == "Save File":
             save_xml(tree, get_xml)
+        elif option == "Change File Elements":
+            change_elements()
         elif option == "Quit":
             confirmation = input("Would you like to save before quitting? (yes/no): ")
             if confirmation == "yes" and "Yes" and "y":
