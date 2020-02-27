@@ -27,28 +27,60 @@ def change_elements(tree):
             change_tags(tree, element_change)
             return element_change
         elif element_change == "Menu":
+            menu()
             trueFalse = True
-    menu()
 
 def change_tags(tree, element_change):
     trueFalse = False
     while trueFalse != True:
-        print(f"To find all cases of a tag in {element_change}, enter: 'Find All'")
+        print(f"To view all {element_change}'s, enter: \'Find All\'")
+        print(f"To update all cases of a tag in {element_change}, enter: 'Update Tags'")
         print(f"To add a tag to {element_change}, enter 'Add Tag'")
         print(f"To remove a tag from {element_change}, enter 'Remove Tag'")
         print("To change different element, enter: 'Diff Element'")
         print("To return to home menu, enter: 'Home Menu'")
         option = input("Please enter a command: ")
         if option == "Find All":
-            pass
+            view_all_elements(tree, element_change)
+        elif option == "Update Tags":
+            update_all_tags(tree, element_change)
         elif option == "Add Tag":
-            pass
+            add_tag_to_elements(tree, element_change)
         elif option == "Remove Tag":
-            pass
+            remove_tag_from_element(tree, element_change)
         elif option == "Diff Element":
             change_elements(tree)
         elif option == "Home Menu":
             menu()
+            trueFalse = True
+
+def update_all_tags(tree, element_change):
+    tree = tree.getroot()
+    update_tag = input("Which tag do you want to update? ")
+    new_tag = input("What will the tag display? ")
+    if element_change == "testsuites":
+        tag = ET.SubElement(tree, element_change)
+        tag.set(update_tag, new_tag)
+        return tree
+
+def view_all_elements(tree, element_change):
+    element = tree.getroot()
+    if element_change == "testsuites":
+        print(element.tag, element.attrib) 
+    elif element_change == "testsuite":
+        for testsuite in element:
+            print(testsuite.tag, testsuite.attrib)
+    elif element_change == "testcase":
+        for testsuite in element:
+            for testcase in testsuite:
+                print(testcase.tag, testcase.attrib)
+
+
+def add_tag_to_elements(tree, element_change):
+    pass
+
+def remove_tag_from_element(tree, element_change):
+    pass
 
 def save_xml(tree, get_xml):
     yesNo = input("Would you like to save to the original file name? (yes/no): ")
@@ -72,19 +104,19 @@ def menu():
         print("To enter a file, enter 'New File'")
         print("To read the current file, enter 'Read File'")
         print("To save your current file, enter 'Save File'")
-        print("To enter change file elements, enter 'Change File Elements'")
-        print("To display all file elements, enter 'Display Elements'")
+        print("To enter modify file, enter 'Modify File'")
+        print("To display file, enter 'Display File'")
         print("To quit the program, enter 'Quit'")
         option = input("Please enter a command: ")
         if option == "New File":
             get_xml = take_in_file()
-        elif option == "Parse":
+        elif option == "Read File":
             tree = parseXML(get_xml)
         elif option == "Save File":
             save_xml(tree, get_xml)
-        elif option == "Change File Elements":
+        elif option == "Modify File":
             change_elements(tree)
-        elif option == "Display Elements":
+        elif option == "Display File":
             displayElements(tree)
         elif option == "Quit":
             confirmation = input("Would you like to save before quitting? (yes/no): ")
