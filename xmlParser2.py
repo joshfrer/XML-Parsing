@@ -53,13 +53,23 @@ def change_tags(tree, element_change):
             trueFalse = True
 
 def update_all_tags(tree, element_change):
-    tree = tree.getroot()
-    update_tag = input("Which tag do you want to update? ")
-    new_tag = input("What will the tag display? ")
-    if element_change == "testsuites":
-        tag = ET.SubElement(tree, element_change)
-        tag.set(update_tag, new_tag)
-        return tree
+    testsuites = tree.getroot()
+    tag = input("Which tag do you want to update? ")
+    attribute = input("What is the new attribute? ")
+    if element_change == "testuites":
+        testsuites.find(element_change)
+        testsuites.set(tag, attribute)
+    elif element_change == "testsuite":
+        for testsuite in testsuites:
+            testsuite.find(element_change)
+            testsuite.set(tag, attribute)
+    elif element_change == "testcase":
+        for testsuite in testsuites:
+            for testcase in testsuite:
+                testcase.find(element_change)
+                testsuite.set(tag, attribute)
+    
+    return tree
 
 def view_all_elements(tree, element_change):
     element = tree.getroot()
@@ -80,6 +90,15 @@ def add_tag_to_elements(tree, element_change):
 def remove_tag_from_element(tree, element_change):
     pass
 
+def add_elements(tree, element_change):
+    tree = tree.getroot()
+    update_tag = input("Which tag do you want to update? ")
+    new_tag = input("What will the tag display? ")
+    if element_change == "testsuites":
+        tag = ET.SubElement(tree, element_change)
+        tag.set(update_tag, new_tag)
+        return tree
+
 def save_xml(tree, get_xml):
     yesNo = input("Would you like to save to the original file name? (yes/no): ")
     if yesNo == "yes":
@@ -99,14 +118,14 @@ def displayElements(tree):
 def menu():
     trueFalse = False
     while trueFalse != True:
-        print("To enter a file, enter 'New File'")
+        print("To enter a file, enter 'Enter File'")
         print("To read the current file, enter 'Read File'")
         print("To save your current file, enter 'Save File'")
         print("To enter modify file, enter 'Modify File'")
         print("To display file, enter 'Display File'")
         print("To quit the program, enter 'Quit'")
         option = input("Please enter a command: ")
-        if option == "New File":
+        if option == "Enter File":
             get_xml = take_in_file()
         elif option == "Read File":
             tree = parseXML(get_xml)
