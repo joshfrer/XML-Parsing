@@ -27,7 +27,6 @@ def change_elements(tree):
             change_tags(tree, element_change)
             return element_change
         elif element_change == "Menu":
-            menu()
             trueFalse = True
 
 def change_tags(tree, element_change):
@@ -51,7 +50,6 @@ def change_tags(tree, element_change):
         elif option == "Diff Element":
             change_elements(tree)
         elif option == "Home Menu":
-            menu()
             trueFalse = True
 
 def update_all_tags(tree, element_change):
