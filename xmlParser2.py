@@ -3,6 +3,7 @@ Josh's XML Parser
 1/23/2020
 """
 
+import sys
 import xml.etree.ElementTree as ET
 
 def take_in_file():
@@ -16,22 +17,22 @@ def parseXML(get_xml):
     return tree
 
 def change_elements(tree):
-    trueFalse = False
-    while trueFalse != True:
+    menuLoop = False
+    while menuLoop != True:
         print("To change testsuites, enter: 'testsuites'")
         print("To change testsuite, enter 'testsuite'")
-        print(f"To change testcase, enter 'testcase'")
+        print("To change testcase, enter 'testcase'")
         print("To return to menu, enter 'Menu'")
         element_change = input("What element would you like to change? ")
         if element_change == "testsuites" or element_change =="testsuite" or element_change == "testcase":
             change_tags(tree, element_change)
             return element_change
         elif element_change == "Menu":
-            trueFalse = True
+            menuLoop = True
 
 def change_tags(tree, element_change):
-    trueFalse = False
-    while trueFalse != True:
+    menuLoop = False
+    while menuLoop != True:
         print(f"To view all {element_change}'s, enter: \'Find All\'")
         print(f"To update all cases of a tag in {element_change}, enter: 'Update Tags'")
         print(f"To add a tag to {element_change}, enter 'Add Tag'")
@@ -50,7 +51,7 @@ def change_tags(tree, element_change):
         elif option == "Diff Element":
             change_elements(tree)
         elif option == "Home Menu":
-            trueFalse = True
+            menuLoop = True
 
 def update_all_tags(tree, element_change):
     testsuites = tree.getroot()
@@ -85,10 +86,42 @@ def view_all_elements(tree, element_change):
 
 
 def add_tag_to_elements(tree, element_change):
-    pass
-
+    testsuites = tree.getroot()
+    tag = input("Enter new tag name: ")
+    attribute = input("Enter tag attribute ")
+    if element_change == "testsuites":
+        testsuites.find(element_change)
+        testsuites.set(tag, attribute)
+    elif element_change == "testsuite":
+        for testsuite in testsuites:
+            testsuite.find(element_change)
+            testsuite.set(tag, attribute)
+    elif element_change == "testcase":
+        for testsuite in testsuites:
+            for testcase in testsuite:
+                testcase.find(element_change)
+                testsuite.set(tag, attribute)
+        
+    return tree
+    
 def remove_tag_from_element(tree, element_change):
-    pass
+    testsuites = tree.getroot()
+    tag = input("Which tag do you want to remove? ")
+    attribute = input("What is the attribute you want to remove? ")
+    if element_change == "testsuites":
+        #path = testsuites.find('./[@{0}={1}]'.format(tag, attribute))
+        #testsuites.remove(path)
+        testsuites.attrib.pop(tag, attribute)
+    elif element_change == "testsuite":
+        for testsuite in testsuites:
+            testsuite.attrib.pop(tag, attribute)
+    elif element_change == "testcase":
+        for testsuite in testsuites:
+            for testcase in testsuite:
+                testcase.attrib.pop(tag, attribute)
+    
+    return tree
+
 
 def add_elements(tree, element_change):
     tree = tree.getroot()
@@ -116,8 +149,8 @@ def displayElements(tree):
             print(testcase.tag, testcase.attrib)
 
 def menu():
-    trueFalse = False
-    while trueFalse != True:
+    menuLoop = False
+    while menuLoop != True:
         print("To enter a file, enter 'Enter File'")
         print("To read the current file, enter 'Read File'")
         print("To save your current file, enter 'Save File'")
@@ -140,14 +173,15 @@ def menu():
             if confirmation == "yes":
                 save_xml(tree, get_xml)
                 print("File has successfully saved!")
-                trueFalse = True
+                menuLoop = True
             elif confirmation == "no":
                 print("Thank you!")
-                trueFalse = True
+                menuLoop = True
                    
     
-menu()
-
-"""def if __name__ == "__main__":
-    pass"""
+def main():
+    menu()
+    
+if __name__ == "__main__":
+    main()
 
