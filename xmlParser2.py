@@ -9,12 +9,27 @@ import xml.etree.ElementTree as ET
 def take_in_file():
     # Here is a sample file: 
     # C:\\Users\\joshua.frerichs\\Desktop\\PASSED_ESYNT19014_83_276_2020_1_8_18_28.xml
+    menuLoop = False
+    print("")
     get_xml = input("Please copy and paste the xml file and input here: ")
-    return get_xml
-
+    print("")
+    while menuLoop != True: 
+        if get_xml == "":
+            print("")
+            print("Error! No file entered!")
+            print("")
+            menuLoop = True
+            return get_xml
+        else:
+            menuLoop = True
+            return get_xml
+        
 def parseXML(get_xml):
-    tree = ET.parse(get_xml)
-    return tree
+    if get_xml == "":
+        print("Error! No file found!")
+    else:
+        tree = ET.parse(get_xml)
+        return tree
 
 def change_elements(tree):
     menuLoop = False
@@ -24,11 +39,15 @@ def change_elements(tree):
         print("To change testcase, enter 'testcase'")
         print("To return to menu, enter 'Menu'")
         element_change = input("What element would you like to change? ")
-        if element_change == "testsuites" or element_change =="testsuite" or element_change == "testcase":
+        if element_change == "testsuites" or element_change == "testsuite" or element_change == "testcase":
             change_tags(tree, element_change)
             return element_change
         elif element_change == "Menu":
             menuLoop = True
+        else:
+            print("")
+            print(f"Element '{element_change}' does not exist. ")
+            print("")
 
 def change_tags(tree, element_change):
     menuLoop = False
@@ -38,7 +57,7 @@ def change_tags(tree, element_change):
         print(f"To add a tag to {element_change}, enter 'Add Tag'")
         print(f"To remove a tag from {element_change}, enter 'Remove Tag'")
         print("To change different element, enter: 'Diff Element'")
-        print("To return to home menu, enter: 'Home Menu'")
+        print("To return to home menu, enter: 'Menu'")
         option = input("Please enter a command: ")
         if option == "Find All":
             view_all_elements(tree, element_change)
@@ -50,16 +69,21 @@ def change_tags(tree, element_change):
             remove_tag_from_element(tree, element_change)
         elif option == "Diff Element":
             change_elements(tree)
-        elif option == "Home Menu":
+        elif option == "Menu":
             menuLoop = True
+        else:
+            print("")
+            print(f"The command '{option}' does not exist. ")
+            print("")
 
 def update_all_tags(tree, element_change):
     testsuites = tree.getroot()
     tag = input("Which tag do you want to update? ")
     attribute = input("What is the new attribute? ")
-    if element_change == "testuites":
+    if element_change == "testsuites":
         testsuites.find(element_change)
         testsuites.set(tag, attribute)
+        print(testsuites.tag, testsuites.attrib)
     elif element_change == "testsuite":
         for testsuite in testsuites:
             testsuite.find(element_change)
@@ -69,7 +93,7 @@ def update_all_tags(tree, element_change):
             for testcase in testsuite:
                 testcase.find(element_change)
                 testsuite.set(tag, attribute)
-    
+     
     return tree
 
 def view_all_elements(tree, element_change):
@@ -92,6 +116,7 @@ def add_tag_to_elements(tree, element_change):
     if element_change == "testsuites":
         testsuites.find(element_change)
         testsuites.set(tag, attribute)
+        return tree
     elif element_change == "testsuite":
         for testsuite in testsuites:
             testsuite.find(element_change)
@@ -100,7 +125,7 @@ def add_tag_to_elements(tree, element_change):
         for testsuite in testsuites:
             for testcase in testsuite:
                 testcase.find(element_change)
-                testsuite.set(tag, attribute)
+                testcase.set(tag, attribute)
         
     return tree
     
@@ -121,7 +146,6 @@ def remove_tag_from_element(tree, element_change):
                 testcase.attrib.pop(tag, attribute)
     
     return tree
-
 
 def add_elements(tree, element_change):
     tree = tree.getroot()
@@ -150,6 +174,8 @@ def displayElements(tree):
 
 def menu():
     menuLoop = False
+    get_xml = ""
+    tree = ""
     while menuLoop != True:
         print("To enter a file, enter 'Enter File'")
         print("To read the current file, enter 'Read File'")
@@ -160,28 +186,75 @@ def menu():
         option = input("Please enter a command: ")
         if option == "Enter File":
             get_xml = take_in_file()
-        elif option == "Read File":
-            tree = parseXML(get_xml)
+        elif option == "Read File": 
+            if get_xml == "":
+                print("")
+                print("Error! No file found!")
+                print("Please enter file.")
+                print("")
+            else:
+                tree = parseXML(get_xml)
         elif option == "Save File":
-            save_xml(tree, get_xml)
+            if get_xml == "":
+                print("")
+                print("Error! No file found!")
+                print("Please enter file.")
+                print("")
+            else:
+                save_xml(tree, get_xml)
         elif option == "Modify File":
-            change_elements(tree)
+            if get_xml == "":
+                print("")
+                print("Error! No file found!")
+                print("Please enter file.")
+                print("")
+            elif tree == "":
+                print("")
+                print("Error! File has not been read!")
+                print("Please read file.")
+                print("")
+            else:
+                change_elements(tree)
         elif option == "Display File":
-            displayElements(tree)
+            if get_xml == "":
+                print("")
+                print("Error! No file found!")
+                print("Please enter file.")
+                print("")
+            elif tree == "":
+                print("")
+                print("Error! File has not been read!")
+                print("Please read file.")
+                print("")
+            else:
+                displayElements(tree)
         elif option == "Quit":
+            print("")
             confirmation = input("Would you like to save before quitting? (yes/no): ")
+            print("")
+            if confirmation == "yes" and get_xml == "":
+                print("")
+                print("Error! No file found!")
+                print("Please enter file.")
+                print("")
+                menu()
             if confirmation == "yes":
                 save_xml(tree, get_xml)
                 print("File has successfully saved!")
                 menuLoop = True
             elif confirmation == "no":
                 print("Thank you!")
+                print("")
                 menuLoop = True
+        else:
+            print("")
+            print(f"The command '{option}' does not exist. ")
+            print("")
                    
     
 def main():
     menu()
-    
+
 if __name__ == "__main__":
     main()
 
